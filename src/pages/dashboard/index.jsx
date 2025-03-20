@@ -3,10 +3,10 @@ import styles from "./Dashboard.module.css";
 import { useNavigate } from "react-router-dom";
 import { GetProjects, GetUserApi } from "../../services";
 
-const Dashboard = () => {
+const Dashboard = ({ setProjectId }) => {
   const [logoutButton, setLogoutButton] = useState(true)
   const [projects, setProjects] = useState([])
-  const [userProjects, setUserProjects] = useState()
+  const [search, setSearch] = useState("")
   const [users, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState("")
   const navigate = useNavigate()
@@ -25,10 +25,9 @@ const Dashboard = () => {
     try {
       if (response.status === 200) {
         setUsers(response?.data)
-        console.log(proj);
       }
     } catch (error) {
-
+      console.error("error in fatch user api")
     }
   }
 
@@ -37,17 +36,12 @@ const Dashboard = () => {
     try {
       if (response.status === 200) {
         setProjects(response?.data)
-        setUserProjects()
       } else {
         console.log("error in get project api");
       }
     } catch (error) {
       console.error("error in get project api", error)
     }
-  }
-
-  const handleProject = (projectId) => {
-    navigate(`/userTasksTable/${projectId}`)
   }
 
   const handleLogout = () => {
@@ -57,14 +51,41 @@ const Dashboard = () => {
     navigate("/login")
   }
 
+  const handleSelectedUser = (e) => {
+    const selectedValue = e.target.value
+    setSelectedUser(selectedValue)
+  }
+
+  const filteredProjects =
+    selectedUser ? (projects.filter((project) => (
+      project?.user?._id === selectedUser
+    ))
+    ) : projects;
+
+  const handleProjects = (project_id) => {
+    setProjectId(project_id)
+    navigate("/userTasksTable")
+  }
+
+  const handleSearchProjects = (e) => {
+    const searchValue = e.target.value
+    setSearch(searchValue)
+    const name = projects.filter((item) => item.projectName == searchValue)
+    setProjects(name)
+    console.log(name);
+    
+  }
+
   return (
     <div className={styles.dashboardContainer}>
       <nav className={styles.navbar}>
         <h1 className={styles.title}>Dashboard</h1>
+        <input type="search" onChange={handleSearchProjects}
+          value={search} placeholder="search project" />
         <select
           className={styles.dropdown}
           value={selectedUser}
-          onChange={(e) => setSelectedUser(e.target.value)}
+          onChange={handleSelectedUser}
         >
           <option value="">All users</option>
           {users.map((user) => (
@@ -76,18 +97,31 @@ const Dashboard = () => {
         </div>
         {logoutButton ? <button className={styles.logoutButton} onClick={() => navigate("/login")}>Login</button> : <button className={styles.logoutButton} onClick={handleLogout}>Logout</button>}
       </nav>
-      {
-        projects.length > 0 ? (projects.map((item) => (
-          <div key={item._id} className={styles.taskGrid} onClick={() => handleProject(item._id)}>
+      {filteredProjects.length > 0 ? (
+        filteredProjects.map((item) => (
+          <div key={item._id} className={styles.taskGrid}
+            onClick={() => handleProjects(item._id)}
+          >
             <div className={styles.taskCard}>
               <h3>{item.projectName}</h3>
-              <p><strong>Assigned to: </strong>{item?.user?.name}</p>
-              <p><strong>Created Date: </strong>{item.createdDate}</p>
-              <p><strong>Priority: </strong>{item.priority}</p>
+              <p>
+                <strong>Assigned to: </strong>
+                {item?.user?.name}
+              </p>
+              <p>
+                <strong>Created Date: </strong>
+                {item.createdDate}
+              </p>
+              <p>
+                <strong>Priority: </strong>
+                {item.priority}
+              </p>
             </div>
           </div>
-        ))) : (<h3>no project added</h3>)
-      }
+        ))
+      ) : (
+        <h3>No projects found</h3>
+      )}
     </div >
   );
 };

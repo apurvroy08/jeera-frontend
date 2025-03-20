@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./UserTasksForm.module.css";
 import { useNavigate } from "react-router-dom";
 import { AddTasksApi, UpdateTaskApi } from "../../services";
-import { useParams } from "react-router-dom";
 
-const UserTasksForm = ({ editTask, setTaskData }) => {
-  
-  const {projectId} = useParams()
+const UserTasksForm = ({ editTask, setTaskData, projectId }) => {
 
   const [userTaskFormData, setUserTaskFormData] = useState({
     project: projectId,
@@ -45,8 +42,7 @@ const UserTasksForm = ({ editTask, setTaskData }) => {
         setTaskData(prevTasks => [...prevTasks, response.data.task]);
       }
     }
-
-    navigate(`/userTasksTable/${projectId}`);
+    navigate("/userTasksTable");
 
     setUserTaskFormData({
       taskName: "",
@@ -54,6 +50,7 @@ const UserTasksForm = ({ editTask, setTaskData }) => {
       taskDetails: "",
       remark: "",
     });
+
   };
 
   return (

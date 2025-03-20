@@ -2,27 +2,30 @@ import React, { useEffect, useState } from 'react'
 import styles from './UserTasksTable.module.css'
 import { useNavigate } from 'react-router-dom'
 import { GetTasksApi, DeleteTaskApi } from '../../services'
-import { useParams } from 'react-router-dom'
 
-const UserTasksTable = ({setEditTask}) => {
+const UserTasksTable = ({ setEditTask, projectId }) => {
 
     const [allTasks, setAllTasks] = useState([])
     const navigate = useNavigate()
-    const params = useParams();
-
-    const projectId = params.projectId    
 
     useEffect(() => {
         fetchAllTasksData()
     }, [])
-
+    
     const fetchAllTasksData = async () => {
-        const response = await GetTasksApi(projectId)
+        const response = await GetTasksApi()
         if (response?.status === 200) {
-            setAllTasks(response?.data)
+            const filteredTasks = response?.data?.filter(task => task.project === projectId);
+        setAllTasks(filteredTasks);
         } else {
             console.log("error in fetching the tasks data")
         }
+    }
+    console.log(allTasks, "all task");
+
+    const handleAddTask = () => {
+        setEditTask("")
+        navigate("/userTaskForm")
     }
 
     const handleEditTask = async (task) => {
@@ -50,7 +53,7 @@ const UserTasksTable = ({setEditTask}) => {
 
     return (
         <div className={styles.container}>
-            <button className={styles.addTaskButton} onClick={() => navigate(`/userTaskForm/${projectId}`)}>Add Task</button>
+            <button className={styles.addTaskButton} onClick={handleAddTask}>Add Task</button>
             <table className={styles.taskTable}>
                 <thead>
                     <tr>

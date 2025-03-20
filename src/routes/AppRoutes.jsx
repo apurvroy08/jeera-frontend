@@ -11,15 +11,16 @@ const AppRoutes = () => {
 
     const [taskData, setTaskData] = useState([])
     const [editTask, setEditTask] = useState()
+    const [projectId, setProjectId] = useState("")
     
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Dashboard />} />
+                <Route path='/' element={<Dashboard setProjectId={setProjectId} />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<Signup />} />
-                <Route path='/userTasksTable/:projectId' element={<UserTasksTable taskData={taskData} setEditTask={setEditTask} />} />
-                <Route path='/userTaskForm/:projectId' element={<UserTasksForm setTaskData={setTaskData} editTask={editTask} />} />
+                <Route path='/userTasksTable' element={<UserTasksTable taskData={taskData} setEditTask={setEditTask} setProjectId={setProjectId} projectId={projectId} />} />
+                <Route path='/userTaskForm' element={<UserTasksForm setTaskData={setTaskData} editTask={editTask} projectId={projectId} />} />
                 <Route path='/addProjectForm' element={<AddProjectForm />} />
             </Routes>
         </BrowserRouter>

@@ -31,9 +31,9 @@ export const AddTasksApi = async (data) => {
     }
 }
 
-export const GetTasksApi = async (projectId) => {
+export const GetTasksApi = async () => {
     try {
-        const response = await axiosInstanse.get(`${apiEndPoint.getTasks}/${projectId}`, projectId)
+        const response = await axiosInstanse.get(apiEndPoint.getTasks)
         return response
     } catch (error) {
         console.error("Get tasks api error", error)
