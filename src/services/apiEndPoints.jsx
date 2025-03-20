@@ -1,11 +1,11 @@
 export const apiEndPoint = {
-    signup: "http://localhost:5000/api/signup",
-    login: "http://localhost:5000/api/login",
-    addTask: "http://localhost:5000/api/addTasks",
-    getTasks: "http://localhost:5000/api/getTasks",
-    deleteTask: "http://localhost:5000/api/deleteTask",
-    updateTask: "http://localhost:5000/api/updateTask",
-    getUsersName:"http://localhost:5000/api/getUsers",
-    addProject:"http://localhost:5000/api/addProject",
-    getProjects:"http://localhost:5000/api/getProjects"
+    signup: "https://jeera-backend-1.onrender.com/api/signup",
+    login: "https://jeera-backend-1.onrender.com/api/login",
+    addTask: "https://jeera-backend-1.onrender.com/api/addTasks",
+    getTasks: "https://jeera-backend-1.onrender.com/api/getTasks",
+    deleteTask: "https://jeera-backend-1.onrender.com/api/deleteTask",
+    updateTask: "https://jeera-backend-1.onrender.com/api/updateTask",
+    getUsersName:"https://jeera-backend-1.onrender.com/api/getUsers",
+    addProject:"https://jeera-backend-1.onrender.com/api/addProject",
+    getProjects:"https://jeera-backend-1.onrender.com/api/getProjects"
 }
